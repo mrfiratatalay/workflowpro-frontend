@@ -67,7 +67,9 @@ export default function Tasks() {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetchWithAuth("http://localhost:8000/tasks");
+      const response = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/tasks`
+      );
       if (response.ok) {
         const tasksData = await response.json();
         setTasks(tasksData);
@@ -85,10 +87,13 @@ export default function Tasks() {
         due_date: taskForm.due_date || null,
       };
 
-      const response = await fetchWithAuth("http://localhost:8000/tasks", {
-        method: "POST",
-        body: JSON.stringify(taskData),
-      });
+      const response = await fetchWithAuth(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/tasks`,
+        {
+          method: "POST",
+          body: JSON.stringify(taskData),
+        }
+      );
 
       if (response.ok) {
         await fetchTasks();
@@ -117,7 +122,9 @@ export default function Tasks() {
       };
 
       const response = await fetchWithAuth(
-        `http://localhost:8000/tasks/${editingTask.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/tasks/${
+          editingTask.id
+        }`,
         {
           method: "PUT",
           body: JSON.stringify(taskData),
@@ -145,7 +152,9 @@ export default function Tasks() {
 
     try {
       const response = await fetchWithAuth(
-        `http://localhost:8000/tasks/${taskId}`,
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+        }/tasks/${taskId}`,
         {
           method: "DELETE",
         }

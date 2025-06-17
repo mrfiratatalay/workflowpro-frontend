@@ -62,9 +62,14 @@ export default function ProjectsPage() {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch("http://localhost:8000/projects", {
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+        }/projects`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
@@ -79,7 +84,9 @@ export default function ProjectsPage() {
   const fetchProjectDetails = async (projectId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/projects/${projectId}`,
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+        }/projects/${projectId}`,
         {
           headers: getAuthHeaders(),
         }
@@ -97,14 +104,19 @@ export default function ProjectsPage() {
   const createProject = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/projects", {
-        method: "POST",
-        headers: {
-          ...getAuthHeaders(),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProject),
-      });
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+        }/projects`,
+        {
+          method: "POST",
+          headers: {
+            ...getAuthHeaders(),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newProject),
+        }
+      );
 
       if (response.ok) {
         setNewProject({ name: "", description: "", status: "planning" });
@@ -128,7 +140,9 @@ export default function ProjectsPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/users/search?email=${encodeURIComponent(email)}`,
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+        }/users/search?email=${encodeURIComponent(email)}`,
         {
           headers: getAuthHeaders(),
         }
@@ -147,7 +161,9 @@ export default function ProjectsPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/projects/${selectedProject.id}/team`,
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+        }/projects/${selectedProject.id}/team`,
         {
           method: "POST",
           headers: {
@@ -177,7 +193,9 @@ export default function ProjectsPage() {
     if (confirm("Are you sure you want to remove this team member?")) {
       try {
         const response = await fetch(
-          `http://localhost:8000/projects/${selectedProject.id}/team/${userId}`,
+          `${
+            process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+          }/projects/${selectedProject.id}/team/${userId}`,
           {
             method: "DELETE",
             headers: getAuthHeaders(),

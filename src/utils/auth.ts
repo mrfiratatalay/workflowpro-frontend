@@ -1,22 +1,26 @@
-export const getToken = (): string | null => {
+import { API_ENDPOINTS } from "./api";
+
+interface User {
+  id: number;
+  email: string;
+  username: string;
+  full_name: string;
+  is_active: boolean;
+}
+
+export const isAuthenticated = () => {
+  if (typeof window === "undefined") return false;
+  return !!localStorage.getItem("access_token");
+};
+
+export const getToken = () => {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("access_token");
 };
 
-export const setToken = (token: string): void => {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("access_token", token);
-  }
-};
-
-export const removeToken = (): void => {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("access_token");
-  }
-};
-
-export const isAuthenticated = (): boolean => {
-  return getToken() !== null;
+export const removeToken = () => {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem("access_token");
 };
 
 export const getAuthHeaders = () => {
@@ -42,20 +46,9 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   });
 };
 
-export interface User {
-  id: number;
-  email: string;
-  username: string;
-  full_name: string | null;
-  is_active: boolean;
-  is_admin: boolean;
-  created_at: string;
-  updated_at: string | null;
-}
-
 export const getCurrentUser = async (): Promise<User | null> => {
   try {
-    const response = await fetchWithAuth("http://localhost:8000/me");
+    const response = await fetchWithAuth(API_ENDPOINTS.ME);
     if (response.ok) {
       return await response.json();
     }

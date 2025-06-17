@@ -6,9 +6,15 @@ import {
   getCurrentUser,
   isAuthenticated,
   removeToken,
-  User,
   fetchWithAuth,
 } from "@/utils/auth";
+interface User {
+  id: number;
+  email: string;
+  username: string;
+  full_name: string;
+  is_active: boolean;
+}
 
 interface Task {
   id: number;
@@ -58,7 +64,9 @@ export default function Dashboard() {
   const fetchTasks = async () => {
     try {
       const response = await fetchWithAuth(
-        "http://localhost:8000/tasks?limit=5"
+        `${
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+        }/tasks?limit=5`
       );
       if (response.ok) {
         const tasks: Task[] = await response.json();
